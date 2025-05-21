@@ -24,7 +24,7 @@ class DecisionTree(BaseModel):
     def fit(self, X, y):
         y_scaled = (y + 1) // 2  # convert -1, 1 to 0, 1
         y_scaled = y_scaled.flatten()
-        self.root = self._build_tree(X, y_scaled, 0)
+        self.root = self.__build_tree(X, y_scaled, 0)
 
     def predict(self, X):
         predictions = np.zeros(X.shape[0])
@@ -44,7 +44,17 @@ class DecisionTree(BaseModel):
     def __str__(self):
         return "Decision Tree"
 
-    def _build_tree(self, X, y, depth):
+    def get_number_of_leaves(self):
+        def count_leaves(node):
+            if node is None:
+                return 0
+            if node.left is None and node.right is None:
+                return 1
+            return count_leaves(node.left) + count_leaves(node.right)
+
+        return count_leaves(self.root)
+
+    def __build_tree(self, X, y, depth):
         m, d = X.shape
         no_labels = len(np.unique(y))
 
@@ -87,8 +97,8 @@ class DecisionTree(BaseModel):
             label = np.bincount(y).argmax()
             return TreeNode(feature=None, threshold=None, label=label)
 
-        left = self._build_tree(X[best_splits[0]], y[best_splits[0]], depth + 1)
-        right = self._build_tree(X[best_splits[1]], y[best_splits[1]], depth + 1)
+        left = self.__build_tree(X[best_splits[0]], y[best_splits[0]], depth + 1)
+        right = self.__build_tree(X[best_splits[1]], y[best_splits[1]], depth + 1)
         return TreeNode(feature=best_feature, threshold=best_threshold, left=left, right=right)
 
     '''
