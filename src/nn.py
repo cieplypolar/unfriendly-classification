@@ -2,8 +2,10 @@ import numpy as np
 from src.classification import BaseModel
 from src.activation import sigmoid, ReLU, ReLU_backward
 
-
-# I wrote this code for Artificial Intelligence course at JU
+'''
+I wrote this code for Artificial Intelligence course at JU
+As far as I remember it it strongly inspired by slides
+'''
 class HardcodedNeuralNetwork(BaseModel):
     """
     Very basic NN for classification
